@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Thread_Practice
 {
@@ -17,18 +18,13 @@ namespace Thread_Practice
     {
         static void Main(string[] args)
         {
-            /*
-            Random rand = new Random();
-
-            for (int i = 0; i < 3; i++)
-            {
-                Console.WriteLine(rand.NextDouble());
-            }
-            */
-
             
             //number of darts inside circle, used at end of main
            double dartsInside = 0;
+
+            //used for measuring execution time, usage of stopwatch taken from https://www.tutorialsteacher.com/articles/how-to-calculate-code-execution-time-in-csharp
+            var watch = new System.Diagnostics.Stopwatch();
+
 
             //ask for how many darts to throw
             Console.WriteLine("Please enter how many darts to be thrown: ");
@@ -37,6 +33,9 @@ namespace Thread_Practice
             //ask for how many threads to be ran
             Console.WriteLine("Please enter how many threads to be ran: ");
             int numThreads = Convert.ToInt32(Console.ReadLine());
+
+            //starts stopwatch
+            watch.Start();
 
             //create list of threads based on number of threads
             List<Thread> threads = new List<Thread>();
@@ -79,6 +78,12 @@ namespace Thread_Practice
 
             //prints calculated value of pi
             Console.WriteLine("Value of Pi: " + (4 * (dartsInside / darts)));
+
+            //ends stopwatch
+            watch.Stop();
+
+            //prints time elapsed for program
+            Console.WriteLine("Runtime: " + watch.ElapsedMilliseconds + " ms");
             
             //prevents window from automatically closing
             Console.ReadKey();
