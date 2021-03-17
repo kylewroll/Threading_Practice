@@ -1,4 +1,10 @@
-﻿using System;
+﻿/* Author: Kyle Rolland
+ * Date: 3/16/2021
+ * File: Program.cs
+ * Description: Main driver for program, prompts user for darts throws and number of threads, makes and runs threads, then uses results to calculate estimate of pi
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +17,18 @@ namespace Thread_Practice
     {
         static void Main(string[] args)
         {
+            /*
+            Random rand = new Random();
+
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine(rand.NextDouble());
+            }
+            */
+
+            
             //number of darts inside circle, used at end of main
-            int dartsInside = 0;
+           double dartsInside = 0;
 
             //ask for how many darts to throw
             Console.WriteLine("Please enter how many darts to be thrown: ");
@@ -23,20 +39,22 @@ namespace Thread_Practice
             int numThreads = Convert.ToInt32(Console.ReadLine());
 
             //create list of threads based on number of threads
-            List<Thread> threads = new List<Thread>(numThreads);
+            List<Thread> threads = new List<Thread>();
+            threads.Capacity = numThreads;
 
             //create list of FindPiThreads based on number of threads
-            List<FindPiThread> piThreads = new List<FindPiThread>(numThreads);
+            List<FindPiThread> piThreads = new List<FindPiThread>();
+            piThreads.Capacity = numThreads;
 
 
             //loop that ties threads together and runs throwDarts
             for (int ctr = 0; ctr < numThreads; ctr++)
             {
-                FindPiThread find = new FindPiThread(darts);
+                FindPiThread piThread = new FindPiThread(darts);
 
-                piThreads.Add(find);
+                piThreads.Add(piThread);
 
-                Thread dartsThread = new Thread(new ThreadStart(find.throwDarts));
+                Thread dartsThread = new Thread(new ThreadStart(piThread.throwDarts));
 
                 threads.Add(dartsThread);
 
@@ -59,7 +77,12 @@ namespace Thread_Practice
                 dartsInside = piThreads[ctr].getDartsInside();
             }
 
+            //prints calculated value of pi
             Console.WriteLine("Value of Pi: " + (4 * (dartsInside / darts)));
+            
+            //prevents window from automatically closing
+            Console.ReadKey();
+            
         }
     }
 }
